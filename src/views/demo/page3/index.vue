@@ -1,12 +1,15 @@
 <template>
   <d2-container>
-    <template slot="header">Page 3 header</template>
-    Hello World
+    <liveview></liveview>
   </d2-container>
 </template>
 
 <script>
+import liveview from './liveview'
 export default {
-  name: 'page3'
+  name: 'page3',
+  components: {
+    liveview
+  },
 }
 </script>

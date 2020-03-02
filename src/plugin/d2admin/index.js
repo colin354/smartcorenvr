@@ -9,6 +9,8 @@ import '@/components'
 import '@/assets/svg-icons'
 // 国际化
 import i18n from '@/i18n.js'
+//axios
+import axios from '@/plugin/axios'
 
 // 功能插件
 import pluginError from '@/plugin/error'
@@ -20,6 +22,7 @@ export default {
     // 设置为 false 以阻止 vue 在启动时生成生产提示
     // https://cn.vuejs.org/v2/api/#productionTip
     Vue.config.productionTip = false
+    Vue.prototype.$axios = axios
     // 当前环境
     Vue.prototype.$env = process.env.NODE_ENV
     // 当前的 baseUrl

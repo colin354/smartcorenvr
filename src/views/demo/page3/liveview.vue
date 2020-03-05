@@ -176,35 +176,17 @@
 
 <script>
 import * as types from '@/store/types'
+import '@/assets/material/js/custom.min.js'
+import '@/assets/adapter.js'
+import '@/assets/h5splayer.js'
 
-import 'jquery'
-import 'jquery-ui'
-/* import ampleadmin */
-import '../../assets/material/bootstrap/dist/css/bootstrap.min.css'
-import '../../assets/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css'
-import '../../assets/material/css/animate.css'
-import '../../assets/material/css/style.css'
-import '../../assets/material/css/colors/default.css'
-// import './assets/material/css/colors/megna-dark.css'
-import '../../assets/plugins/bower_components/jquery/dist/jquery.min'
-import '../../assets/material/bootstrap/dist/js/bootstrap.min'
-import '../../assets/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min'
-import '../../assets/material/js/jquery.slimscroll'
-import '../../assets/material/js/waves'
-import '../../assets/material/js/custom.min'
-import '../../assets/plugins/bower_components/styleswitcher/jQuery.style.switcher'
-
-import '../../assets/material/js/custom.min.js'
-import '../../assets/adapter.js'
-import '../../assets/h5splayer.js'
-
-import {H5siOS,H5sPlayerCreate} from '../../assets/h5splayerhelper.js'
+import {H5siOS,H5sPlayerCreate} from '@/assets/h5splayerhelper.js'
 
 import qs from 'qs'
 import Vue from 'vue'
 import 'patternfly-bootstrap-treeview/dist/bootstrap-treeview.min.css'
 import 'patternfly-bootstrap-treeview/dist/bootstrap-treeview.min.js'
-import Liveplayer from '../../components/widgets/liveplayer'
+import Liveplayer from '@/components/widgets/liveplayer'
 
 export default {
     name: "liveview",
@@ -386,8 +368,8 @@ export default {
         //测试机仓
         loadtest(){
             let _this =this;
-		    var root = process.env.API_ROOT;
-		    var wsroot = process.env.WS_HOST_ROOT;
+		    var root = process.env.VUE_APP_API_ROOT;
+		    var wsroot = process.env.VUE_APP_WS_HOST_ROOT;
 		    if (root == undefined){
 		        root = window.location.protocol + '//' + window.location.host + window.location.pathname;
 		    }
@@ -458,8 +440,8 @@ export default {
         //写作业
         loadDevice() {
 		    let _this =this;
-		    var root = process.env.API_ROOT;
-		    var wsroot = process.env.WS_HOST_ROOT;
+		    var root = process.env.VUE_APP_API_ROOT;
+		    var wsroot = process.env.VUE_APP_WS_HOST_ROOT;
 		    if (root == undefined){
 		        root = window.location.protocol + '//' + window.location.host + window.location.pathname;
 		    }
@@ -488,8 +470,8 @@ export default {
         loadSrc(srclevel, srcData) {
 
             let _this =this;
-            var root = process.env.API_ROOT;
-            var wsroot = process.env.WS_HOST_ROOT;
+		    var root = process.env.VUE_APP_API_ROOT;
+		    var wsroot = process.env.VUE_APP_WS_HOST_ROOT;
             if (root == undefined){
                 root = window.location.protocol + '//' + window.location.host + window.location.pathname;
             }
@@ -566,8 +548,8 @@ export default {
         //数字仓机
         NumberDevice() {
 		    let _this =this;
-		    var root = process.env.API_ROOT;
-		    var wsroot = process.env.WS_HOST_ROOT;
+		    var root = process.env.VUE_APP_API_ROOT;
+		    var wsroot = process.env.VUE_APP_WS_HOST_ROOT;
 		    if (root == undefined){
 		        root = window.location.protocol + '//' + window.location.host + window.location.pathname;
 		    }
@@ -596,8 +578,8 @@ export default {
         NumberSrc(srclevel, srcData) {
 
             let _this =this;
-            var root = process.env.API_ROOT;
-            var wsroot = process.env.WS_HOST_ROOT;
+		    var root = process.env.VUE_APP_API_ROOT;
+		    var wsroot = process.env.VUE_APP_WS_HOST_ROOT;
             if (root == undefined){
                 root = window.location.protocol + '//' + window.location.host + window.location.pathname;
             }
@@ -661,8 +643,8 @@ export default {
         //级联
         cloudDevice() {
 		    let _this =this;
-		    var root = process.env.API_ROOT;
-		    var wsroot = process.env.WS_HOST_ROOT;
+		    var root = process.env.VUE_APP_API_ROOT;
+		    var wsroot = process.env.VUE_APP_WS_HOST_ROOT;
 		    if (root == undefined){
 		        root = window.location.protocol + '//' + window.location.host + window.location.pathname;
 		    }
@@ -691,8 +673,8 @@ export default {
         cloudSrc(srclevel, srcData) {
 
             let _this =this;
-            var root = process.env.API_ROOT;
-            var wsroot = process.env.WS_HOST_ROOT;
+		    var root = process.env.VUE_APP_API_ROOT;
+		    var wsroot = process.env.VUE_APP_WS_HOST_ROOT;
             if (root == undefined){
                 root = window.location.protocol + '//' + window.location.host + window.location.pathname;
             }

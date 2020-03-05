@@ -3,6 +3,7 @@ const VueFilenameInjector = require('@d2-projects/vue-filename-injector')
 const ThemeColorReplacer = require('webpack-theme-color-replacer')
 const forElementUI = require('webpack-theme-color-replacer/forElementUI')
 const cdnDependencies = require('./dependencies-cdn')
+const webpack = require('webpack')
 
 // 拼接路径
 const resolve = dir => require('path').join(__dirname, dir)
@@ -13,7 +14,8 @@ process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss')
 
 // 基础路径 注意发布之前要先修改这里
 let publicPath = process.env.VUE_APP_PUBLIC_PATH || '/'
-
+assetsDir: 'static'
+lintOnSave: false
 // 设置不参与构建的库
 let externals = {}
 cdnDependencies.forEach(package => { externals[package.name] = package.library })
@@ -53,8 +55,24 @@ module.exports = {
           deleteOriginalAssets: false
         })
       ]
+      configNew.plugins =
+      [
+        new webpack.ProvidePlugin({
+          $: "jquery",
+          jQuery:"jquery",
+          "windows.jQuery":"jquery"
+        })
+      ]     
     }
     if (process.env.NODE_ENV === 'development') {
+      configNew.plugins =
+        [
+          new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery:"jquery",
+            "windows.jQuery":"jquery"
+          })
+        ]
       // 关闭 host check，方便使用 ngrok 之类的内网转发工具
       configNew.devServer = {
         disableHostCheck: true
@@ -109,6 +127,7 @@ module.exports = {
           propName: process.env.VUE_APP_SOURCE_VIEWER_PROP_NAME
         })
       )
+      
     // markdown
     config.module
       .rule('md')
@@ -141,6 +160,7 @@ module.exports = {
       .set('@api', resolve('src/api'))
     // 判断环境加入模拟数据
     const entry = config.entry('app')
+    config.entry.app = ['babel-polyfill', './src/main.js']
     if (process.env.VUE_APP_BUILD_MODE !== 'NOMOCK') {
       entry
         .add('@/mock')
@@ -164,4 +184,5 @@ module.exports = {
       enableInSFC: true
     }
   }
+  
 }

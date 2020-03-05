@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import util from '@/libs/util'
+import LangEn from '../public/lang/en'
+import LangZhCHS from '../public/lang/zhchs'
+import LangZhCHT from '../public/lang/zhcht'
 
 Vue.use(VueI18n)
 
@@ -20,7 +23,8 @@ function loadLocaleMessages () {
   }
   return messages
 }
-
+console.log('1111111--00000000')
+console.log(process.env)
 const messages = loadLocaleMessages()
 
 Vue.prototype.$languages = Object.keys(messages).map(langlage => ({
@@ -33,5 +37,6 @@ const i18n = new VueI18n({
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE,
   messages
 })
+
 
 export default i18n

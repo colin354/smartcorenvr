@@ -49,13 +49,14 @@
                     <i slot="prepend" class="fa fa-keyboard-o"></i>
                   </el-input>
                 </el-form-item>
-                <el-form-item prop="code">
-                  <el-input
-                    type="text"
-                    v-model="formLogin.code"
-                    placeholder="验证码">
+                <el-form-item prop="captcha">
+                  <el-input type="text" v-model="formLogin.captcha" placeholder="验证码" @keyup.enter.native="submit">
                     <template slot="append">
-                      <img class="login-code" src="./image/login-code.png">
+                      <div
+                        class="login-captcha"
+                        :style="{ backgroundImage: `url(${captchaPath})` }"
+                        @click="updateUUID"
+                      />
                     </template>
                   </el-input>
                 </el-form-item>
@@ -154,35 +155,28 @@ export default {
       ],
       // 表单
       formLogin: {
-        username: 'admin',
-        password: 'admin',
-        code: 'v9am'
+        username: "test",
+        password: "123cpucpu",
+        uuid: "",
+        captcha: ""
       },
-      // 表单校验
-      rules: {
-        username: [
-          {
-            required: true,
-            message: '请输入用户名',
-            trigger: 'blur'
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: '请输入密码',
-            trigger: 'blur'
-          }
-        ],
-        code: [
-          {
-            required: true,
-            message: '请输入验证码',
-            trigger: 'blur'
-          }
-        ]
-      }
     }
+  },
+  computed: {
+    // 校验
+    rules () {
+      return {
+        username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }]
+      }
+    },
+    captchaPath() {
+      return `${process.env.VUE_APP_API}${this.formLogin.uuid.image_url}`;
+    }
+  },
+  created() {
+    this.updateUUID();
   },
   mounted () {
     this.timeInterval = setInterval(() => {
@@ -196,6 +190,22 @@ export default {
     ...mapActions('d2admin/account', [
       'login'
     ]),
+    /**
+     * @description 刷新 uuid
+     */
+    updateUUID() {
+        // this.$axios.get("/captcha/code")
+        this.$axios.get("/api/captcha")
+            .then(res=> {
+              console.log('********************')
+              console.log(res.image_url);
+              this.formLogin.uuid = res;
+              console.log('********************')
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
     refreshTime () {
       this.time = dayjs().format('HH:mm:ss')
     },
@@ -220,7 +230,9 @@ export default {
           // 具体需要传递的数据请自行修改代码
           this.login({
             username: this.formLogin.username,
-            password: this.formLogin.password
+            password: this.formLogin.password,
+            captcha: this.formLogin.captcha,
+            uuid: this.formLogin.uuid
           })
             .then(() => {
               // 重定向对象不存在则返回顶层路径
@@ -296,9 +308,13 @@ export default {
     .el-input-group__prepend {
       padding: 0px 14px;
     }
-    .login-code {
+    .login-captcha {
+      // https://github.com/d2-projects/d2-admin-renren-security-enterprise/issues/5
+      background-image: linear-gradient(90deg, #C7C7C7 0%, #F9F9F9 100%);
       height: 40px - 2px;
-      display: block;
+      width: 126px;
+      background-size: cover;
+      background-position: center;
       margin: 0px -20px;
       border-top-right-radius: 2px;
       border-bottom-right-radius: 2px;

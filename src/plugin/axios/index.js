@@ -2,9 +2,12 @@ import store from '@/store'
 import axios from 'axios'
 import { Message } from 'element-ui'
 import util from '@/libs/util'
+import { cookieGet } from '@/common/cookie'
+import { isPlainObject } from 'lodash'
+import qs from 'qs'
 
 // 创建一个错误
-function errorCreate (msg) {
+export function errorCreate (msg) {
   const error = new Error(msg)
   errorLog(error)
   throw error
@@ -22,7 +25,7 @@ function errorLog (error) {
   })
   // 打印到控制台
   if (process.env.NODE_ENV === 'development') {
-    util.log.danger('>>>>>> Error >>>>>>')
+    util.log.danger('>>>>>> Error !>>>>>>')
     console.log(error)
   }
   // 显示提示
@@ -36,24 +39,65 @@ function errorLog (error) {
 // 创建一个 axios 实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_API,
-  timeout: 5000 // 请求超时时间
+  timeout: 180 * 10000, // 请求超时时间
+  withCredentials: true
+})
+
+/**
+ * 请求拦截
+ */
+service.interceptors.request.use(config => {
+  config.headers['Accept-Language'] = cookieGet('language') || 'zh-CN'
+  config.headers['Authorization'] = cookieGet('token') || ''
+  // 默认参数
+  console.log('****')
+  var defaults = {}
+  // 防止缓存，GET请求默认带_t参数
+  if (config.method === 'get') {
+    console.log('**---请求拦截**')
+    console.log(config)
+    console.log('**---请求拦截*--end*')
+    config.params = {
+      ...config.params,
+      ...{ '_t': new Date().getTime() }
+    }
+    console.log(config.params)
+  }
+  if (isPlainObject(config.params)) {
+    config.params = {
+      ...defaults,
+      ...config.params
+    }
+  }
+  if (isPlainObject(config.data)) {
+    config.data = {
+      ...defaults,
+      ...config.data
+    }
+    if (/^application\/x-www-form-urlencoded/.test(config.headers['content-type'])) {
+      config.data = qs.stringify(config.data)
+    }
+  }
+  return config
+}, error => {
+  return Promise.reject(error)
 })
 
 // 请求拦截器
-service.interceptors.request.use(
-  config => {
-    // 在请求发送之前做一些处理
-    const token = util.cookies.get('token')
-    // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    config.headers['X-Token'] = token
-    return config
-  },
-  error => {
-    // 发送失败
-    console.log(error)
-    return Promise.reject(error)
-  }
-)
+// service.interceptors.request.use(
+//   config => {
+//     // 在请求发送之前做一些处理
+//     const token = util.cookies.get('token')
+//     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+//     config.headers['Authorization'] = token
+//     return config
+//   },
+//   error => {
+//     // 发送失败
+//     console.log(error)
+//     Promise.reject(error)
+//   }
+// )
 
 // 响应拦截器
 service.interceptors.response.use(
@@ -67,10 +111,16 @@ service.interceptors.response.use(
       // 如果没有 code 代表这不是项目后端开发的接口 比如可能是 D2Admin 请求最新版本
       return dataAxios
     } else {
+      console.log(dataAxios)
       // 有 code 代表这是一个后端接口 可以进行进一步的判断
       switch (code) {
-        case 0:
+        case '0':
           // [ 示例 ] code === 0 代表没有错误
+          return dataAxios.data
+        case '1':
+          // [ 示例 ] code === 0 代表没有错误
+          return dataAxios
+        case '999999':
           return dataAxios.data
         case 'xxx':
           // [ 示例 ] 其它和后台约定的 code
@@ -78,7 +128,13 @@ service.interceptors.response.use(
           break
         default:
           // 不是正确的 code
-          errorCreate(`${dataAxios.msg}: ${response.config.url}`)
+          //return this.$message("无效的facid")
+          // Message({
+          //   message: `${dataAxios.msg}`,
+          //   type: 'success',
+          //   duration: 5 * 1000
+          // })
+          errorCreate(`${dataAxios.msg}`)
           break
       }
     }
@@ -97,12 +153,31 @@ service.interceptors.response.use(
         case 503: error.message = '服务不可用'; break
         case 504: error.message = '网关超时'; break
         case 505: error.message = 'HTTP版本不受支持'; break
-        default: break
+        default: error.message = '请求错误，未找到代码'; break
       }
     }
     errorLog(error)
     return Promise.reject(error)
   }
 )
+
+/**
+ * 响应拦截
+ */
+// service.interceptors.response.use(response => {
+//   if (response.data.code === 401 || response.data.code === 10001) {
+//     store.dispatch('d2admin/account/logout')
+//     return Promise.reject(response.data.msg)
+//   } else if (response.data.code !== 999999) {
+//     console.log(response)
+//     errorLog(response.data.msg)
+//     return Promise.reject(response.data.msg)
+//   } else {
+//     return response.data.data
+//   }
+// }, error => {
+//   errorLog(error.message)
+//   return Promise.reject(error)
+// })
 
 export default service

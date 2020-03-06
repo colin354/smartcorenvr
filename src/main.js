@@ -34,6 +34,8 @@ import '@/assets/plugins/bower_components/styleswitcher/jQuery.style.switcher'
 import event from '@/components/views/js/event'
 import listdatag from '@/components/views/js/dev'
 import regionaldata from '@/components/views/js/regional'
+import '@/assets/icon/iconfont.css'//字体图标
+
 Vue.prototype.regionaldata = regionaldata
 Vue.prototype.listdatag = listdatag
 Vue.prototype.EVENT = event

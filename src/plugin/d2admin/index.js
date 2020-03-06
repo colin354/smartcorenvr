@@ -23,6 +23,7 @@ export default {
     // https://cn.vuejs.org/v2/api/#productionTip
     Vue.config.productionTip = false
     Vue.prototype.$axios = axios
+    Vue.prototype.$axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
     // 当前环境
     Vue.prototype.$env = process.env.NODE_ENV
     // 当前的 baseUrl

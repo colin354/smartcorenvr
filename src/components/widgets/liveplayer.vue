@@ -87,9 +87,9 @@
 
 <script>
 import QRCode from 'qrcodejs2';
-import '../../assets/adapter.js'
-import {H5sPlayerWS,H5sPlayerHls,H5sPlayerRTC,H5sPlayerAudBack} from '../../assets/h5splayer.js'
-import {H5siOS,H5sPlayerCreate} from '../../assets/h5splayerhelper.js'
+import '@/assets/adapter.js'
+import {H5sPlayerWS,H5sPlayerHls,H5sPlayerRTC,H5sPlayerAudBack} from '@/assets/h5splayer.js'
+import {H5siOS,H5sPlayerCreate} from '@/assets/h5splayerhelper.js'
 export default {
     name: 'liveplayer',
     props:['h5id', 'h5videoid',"cols","rows"],
@@ -192,7 +192,7 @@ export default {
         },
         //预置位跳转
         preset_Jump(token){
-            var root = process.env.API_ROOT;
+            var root = process.env.VUE_APP_API_ROOT;
 		    if (root == undefined){
 		        root = window.location.protocol + '//' + window.location.host + window.location.pathname;
 		    }
@@ -211,7 +211,7 @@ export default {
         //预置位设置
         preset_set(token,event){
             var input_val=event.currentTarget.previousElementSibling.previousElementSibling.value;
-            var root = process.env.API_ROOT;
+            var root = process.env.VUE_APP_API_ROOT;
 		    if (root == undefined){
 		        root = window.location.protocol + '//' + window.location.host + window.location.pathname;
 		    }
@@ -242,8 +242,8 @@ export default {
             this.currtoken = token;
             //console.log("play ", token);
             //console.log("play ",streamprofile);
-            var root = process.env.API_ROOT;
-            var wsroot = process.env.WS_HOST_ROOT;
+            var root = process.env.VUE_APP_API_ROOT;
+            var wsroot = process.env.VUE_APP_WS_HOST_ROOT;
             if (root == undefined){
                 root = window.location.protocol + '//' + window.location.host + window.location.pathname;
             }
@@ -367,7 +367,7 @@ export default {
         {
             this.Presetdata=[];
             console.log("+++++++++",this.Presetdata);
-            var root = process.env.API_ROOT;
+            var root = process.env.VUE_APP_API_ROOT;
 		    if (root == undefined){
 		        root = window.location.protocol + '//' + window.location.host + window.location.pathname;
 		    }
@@ -450,7 +450,7 @@ export default {
                 return;
             }
             let _this =this;
-            var root = process.env.API_ROOT;
+            var root = process.env.VUE_APP_API_ROOT;
             if (root == undefined){
                 root = window.location.protocol + '//' + window.location.host + window.location.pathname;
             }
@@ -477,7 +477,7 @@ export default {
                 return;
             }
             let _this =this;
-            var root = process.env.API_ROOT;
+            var root = process.env.VUE_APP_API_ROOT;
             if (root == undefined){
                 root = window.location.protocol + '//' + window.location.host + window.location.pathname;
             }
@@ -509,7 +509,7 @@ export default {
                 return;
             }
             let _this =this;
-            var root = process.env.API_ROOT;
+            var root = process.env.VUE_APP_API_ROOT;
             if (root == undefined){
                 root = window.location.protocol + '//' + window.location.host + window.location.pathname;
             }
@@ -541,7 +541,7 @@ export default {
                 return;
             }
             let _this =this;
-            var root = process.env.API_ROOT;
+            var root = process.env.VUE_APP_API_ROOT;
             if (root == undefined){
                 root = window.location.protocol + '//' + window.location.host + window.location.pathname;
             }
